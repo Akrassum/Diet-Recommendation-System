@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Diet Plan | DietAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <i class="fas fa-leaf"></i> DietAI
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('form') }}">Get Recommendation</a></li>
+    </ul>
+  </nav>
+
+  <!-- Results Section -->
+  <section class="result-section">
+    <div class="result-container">
+
+      <!-- Success header -->
+      <div class="result-header">
+        <div class="result-icon">
+          {% if diet_type == "Weight Loss" %}
+            <i class="fas fa-fire-alt" style="color:#ef4444"></i>
+          {% elif diet_type == "Weight Gain" %}
+            <i class="fas fa-dumbbell" style="color:#3b82f6"></i>
+          {% else %}
+            <i class="fas fa-balance-scale" style="color:#10b981"></i>
+          {% endif %}
+        </div>
+        <h1>Your Personalized Diet Plan</h1>
+        <p>Based on your body metrics, here is what our AI recommends.</p>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-birthday-cake"></i></div>
+          <div class="stat-label">Age</div>
+          <div class="stat-value">{{ age }} yrs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-weight"></i></div>
+          <div class="stat-label">Weight</div>
+          <div class="stat-value">{{ weight }} kg</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-ruler-vertical"></i></div>
+          <div class="stat-label">Height</div>
+          <div class="stat-value">{{ height }} cm</div>
+        </div>
+        <div class="stat-card bmi-card
+          {% if bmi < 18.5 %}bmi-underweight
+          {% elif bmi < 25 %}bmi-normal
+          {% elif bmi < 30 %}bmi-overweight
+          {% else %}bmi-obese{% endif %}">
+          <div class="stat-icon"><i class="fas fa-chart-bar"></i></div>
+          <div class="stat-label">BMI</div>
+          <div class="stat-value">{{ bmi }}</div>
+          <div class="stat-sub">{{ bmi_category }}</div>
+        </div>
+      </div>
+
+      <!-- Diet type banner -->
+      <div class="diet-banner
+        {% if diet_type == 'Weight Loss' %}diet-loss
+        {% elif diet_type == 'Weight Gain' %}diet-gain
+        {% else %}diet-maintain{% endif %}">
+        <i class="fas
+          {% if diet_type == 'Weight Loss' %}fa-fire-alt
+          {% elif diet_type == 'Weight Gain' %}fa-dumbbell
+          {% else %}fa-balance-scale{% endif %}"></i>
+        <div>
+          <div class="diet-label">Recommended Diet Type</div>
+          <div class="diet-type">{{ diet_type }}</div>
+        </div>
+        <div class="calorie-box">
+          <div class="calorie-label">Daily Calorie Target</div>
+          <div class="calorie-value">{{ calories }} kcal</div>
+        </div>
+      </div>
+
+      <!-- Meal Plan -->
+      <div class="meal-plan">
+        <h2><i class="fas fa-utensils"></i> Your Daily Meal Plan</h2>
+        <div class="meal-grid">
+          {% for meal, desc in meal_plan.items() %}
+          <div class="meal-card">
+            <div class="meal-time">
+              {% if "Breakfast" in meal %}<i class="fas fa-sun"></i>
+              {% elif "Morning" in meal %}<i class="fas fa-coffee"></i>
+              {% elif "Lunch" in meal %}<i class="fas fa-hamburger"></i>
+              {% elif "Evening" in meal %}<i class="fas fa-cookie"></i>
+              {% elif "Dinner" in meal %}<i class="fas fa-moon"></i>
+              {% else %}<i class="fas fa-tint"></i>{% endif %}
+              {{ meal }}
+            </div>
+            <div class="meal-desc">{{ desc }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="result-actions">
+        <a href="{{ url_for('form') }}" class="btn btn-secondary">
+          <i class="fas fa-redo"></i> Try Again
+        </a>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+          <i class="fas fa-home"></i> Back to Home
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><i class="fas fa-leaf"></i> DietAI &copy; 2024 — AI-Based Diet Recommendation System</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
