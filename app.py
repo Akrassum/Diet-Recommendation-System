@@ -154,4 +154,8 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Enable debug mode only when FLASK_DEBUG=1 is set in the environment.
+    # Never enable debug mode in production as it exposes an interactive
+    # debugger that allows arbitrary code execution.
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(debug=debug)
