@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Your Diet Plan | DietAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <i class="fas fa-leaf"></i> DietAI
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('form') }}" class="active">Get Recommendation</a></li>
+    </ul>
+  </nav>
+
+  <!-- Form Section -->
+  <section class="form-section">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="form-icon"><i class="fas fa-clipboard-list"></i></div>
+        <h1>Tell Us About Yourself</h1>
+        <p>We need just a few details to generate your personalised diet plan.</p>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-error">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+      </div>
+      {% endif %}
+
+      <form action="{{ url_for('predict') }}" method="POST" id="dietForm" novalidate>
+        <div class="form-group">
+          <label for="age">
+            <i class="fas fa-birthday-cake"></i> Age <span class="unit">(years)</span>
+          </label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            min="1"
+            max="120"
+            placeholder="e.g. 25"
+            required
+          />
+          <span class="field-hint">Enter a value between 1 and 120</span>
+        </div>
+
+        <div class="form-group">
+          <label for="weight">
+            <i class="fas fa-weight"></i> Weight <span class="unit">(kg)</span>
+          </label>
+          <input
+            type="number"
+            id="weight"
+            name="weight"
+            min="10"
+            max="300"
+            step="0.1"
+            placeholder="e.g. 70"
+            required
+          />
+          <span class="field-hint">Enter a value between 10 and 300</span>
+        </div>
+
+        <div class="form-group">
+          <label for="height">
+            <i class="fas fa-ruler-vertical"></i> Height <span class="unit">(cm)</span>
+          </label>
+          <input
+            type="number"
+            id="height"
+            name="height"
+            min="50"
+            max="250"
+            step="0.1"
+            placeholder="e.g. 175"
+            required
+          />
+          <span class="field-hint">Enter a value between 50 and 250</span>
+        </div>
+
+        <!-- Live BMI preview -->
+        <div id="bmiPreview" class="bmi-preview hidden">
+          <span>Live BMI Preview: </span>
+          <strong id="bmiValue">—</strong>
+          <span id="bmiLabel" class="bmi-label"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+          <i class="fas fa-magic"></i> Generate My Diet Plan
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><i class="fas fa-leaf"></i> DietAI &copy; 2024 — AI-Based Diet Recommendation System</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Diet Recommendation System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <i class="fas fa-leaf"></i> DietAI
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
+      <li><a href="{{ url_for('form') }}">Get Recommendation</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="badge">AI-Powered</span>
+      <h1>Smart Diet Recommendations<br/>Just for <span class="highlight">You</span></h1>
+      <p>
+        Enter your details and let our Machine Learning model analyse your BMI
+        and predict the best personalised diet plan — whether you want to
+        <strong>lose weight</strong>, <strong>gain weight</strong>, or
+        <strong>maintain</strong> your current physique.
+      </p>
+      <a href="{{ url_for('form') }}" class="btn btn-primary">
+        Get My Diet Plan <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    <div class="hero-image">
+      <div class="hero-card">
+        <div class="hero-icon"><i class="fas fa-brain"></i></div>
+        <h3>Machine Learning</h3>
+        <p>Decision Tree Classifier trained on real BMI data</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2 class="section-title">Why DietAI?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-calculator"></i></div>
+        <h3>BMI Analysis</h3>
+        <p>Instant BMI calculation with clear weight-status classification.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+        <h3>AI Prediction</h3>
+        <p>ML model predicts your ideal diet type based on age, weight &amp; height.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-fire"></i></div>
+        <h3>Calorie Goals</h3>
+        <p>Personalised daily calorie target calculated using your body metrics.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-utensils"></i></div>
+        <h3>Meal Plans</h3>
+        <p>Detailed meal suggestions for breakfast, lunch, dinner, and snacks.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Enter Details</h3>
+        <p>Provide your age, weight, and height.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>AI Analysis</h3>
+        <p>Our ML model calculates your BMI and predicts your diet type.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Get Your Plan</h3>
+        <p>Receive a personalised meal plan with calorie goals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><i class="fas fa-leaf"></i> DietAI &copy; 2024 — AI-Based Diet Recommendation System</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
