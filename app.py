@@ -57,7 +57,10 @@ def calorie_recommendation(diet_type: str, weight_kg: float, height_cm: float, a
     Return daily calorie target and a sample meal plan based on diet type.
     Uses a simplified Mifflin-St Jeor equation (assumes moderately active).
     """
-    # Base metabolic rate (simplified, gender-neutral average)
+    # Base metabolic rate using a gender-neutral average of the Mifflin-St Jeor
+    # equation (+5 is the male constant; the female constant is -161).
+    # Using +5 provides a neutral estimate suitable for both sexes without
+    # requiring the user to specify gender.
     bmr = 10 * weight_kg + 6.25 * height_cm - 5 * age + 5
     tdee = round(bmr * 1.55)  # moderately active multiplier
 

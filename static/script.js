@@ -73,7 +73,7 @@
     const btn = document.getElementById("submitBtn");
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analysing…';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing…';
     }
   });
 
