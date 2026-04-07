@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Diet Plan — DietAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="result-page">
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <i class="fas fa-leaf"></i>
+        <span>DietAI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/form">New Plan</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Result Section -->
+  <section class="result-section">
+    <div class="result-container">
+
+      <!-- Greeting Header -->
+      <div class="result-header">
+        <div class="result-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="result-greeting">
+          <p class="greeting-small">Here's your personalised plan,</p>
+          <h1 class="greeting-name">{{ name }}! 👋</h1>
+        </div>
+      </div>
+
+      <!-- Summary Cards Row -->
+      <div class="summary-cards">
+        <!-- BMI Card -->
+        <div class="summary-card bmi-card">
+          <div class="card-icon"><i class="fas fa-tachometer-alt"></i></div>
+          <div class="card-body">
+            <div class="card-value bmi-value" id="bmiDisplay">{{ bmi }}</div>
+            <div class="card-label">BMI Score</div>
+            <div class="bmi-category-badge
+              {% if bmi_category == 'Underweight' %}badge-blue
+              {% elif bmi_category == 'Normal weight' %}badge-green
+              {% elif bmi_category == 'Overweight' %}badge-orange
+              {% else %}badge-red{% endif %}">
+              {{ bmi_category }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Diet Type Card -->
+        <div class="summary-card diet-card
+          {% if diet_type == 'Weight Loss' %}diet-loss
+          {% elif diet_type == 'Weight Gain' %}diet-gain
+          {% else %}diet-maintain{% endif %}">
+          <div class="card-icon">
+            {% if diet_type == 'Weight Loss' %}
+              <i class="fas fa-weight"></i>
+            {% elif diet_type == 'Weight Gain' %}
+              <i class="fas fa-dumbbell"></i>
+            {% else %}
+              <i class="fas fa-balance-scale"></i>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="card-value">{{ diet_type }}</div>
+            <div class="card-label">Recommended Diet</div>
+            <div class="card-confidence">
+              <i class="fas fa-check-circle"></i> {{ confidence }}% confidence
+            </div>
+          </div>
+        </div>
+
+        <!-- Calories Card -->
+        <div class="summary-card calorie-card">
+          <div class="card-icon"><i class="fas fa-fire-alt"></i></div>
+          <div class="card-body">
+            <div class="card-value calorie-val">{{ meal_plan.calories }}</div>
+            <div class="card-label">Daily Calorie Target</div>
+            <div class="card-sub">Personalised for you</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BMI Visual Bar -->
+      <div class="bmi-visual-section">
+        <h2 class="section-title"><i class="fas fa-chart-bar"></i> BMI Analysis</h2>
+        <div class="bmi-visual-bar">
+          <div class="bmi-segment underweight" title="Underweight < 18.5">
+            <span class="seg-label">Underweight</span>
+          </div>
+          <div class="bmi-segment normal" title="Normal 18.5–24.9">
+            <span class="seg-label">Normal</span>
+          </div>
+          <div class="bmi-segment overweight" title="Overweight 25–29.9">
+            <span class="seg-label">Overweight</span>
+          </div>
+          <div class="bmi-segment obese" title="Obese ≥ 30">
+            <span class="seg-label">Obese</span>
+          </div>
+        </div>
+        <div class="bmi-pointer-container">
+          <div class="bmi-pointer" id="bmiPointer" data-bmi="{{ bmi }}">
+            <div class="pointer-arrow">▲</div>
+            <div class="pointer-label">{{ bmi }}</div>
+          </div>
+        </div>
+        <div class="bmi-scale-labels">
+          <span>10</span>
+          <span>18.5</span>
+          <span>25</span>
+          <span>30</span>
+          <span>40+</span>
+        </div>
+        <div class="bmi-details-grid">
+          <div class="bmi-detail">
+            <span class="detail-label">Your BMI</span>
+            <span class="detail-value">{{ bmi }}</span>
+          </div>
+          <div class="bmi-detail">
+            <span class="detail-label">Category</span>
+            <span class="detail-value">{{ bmi_category }}</span>
+          </div>
+          <div class="bmi-detail">
+            <span class="detail-label">Weight</span>
+            <span class="detail-value">{{ weight }} kg</span>
+          </div>
+          <div class="bmi-detail">
+            <span class="detail-label">Height</span>
+            <span class="detail-value">{{ height }} cm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meal Plan Section -->
+      <div class="meal-plan-section">
+        <h2 class="section-title"><i class="fas fa-utensils"></i> Your Daily Meal Plan</h2>
+        <p class="section-subtitle">{{ meal_plan.note }}</p>
+
+        <div class="meal-timeline">
+          <div class="meal-item">
+            <div class="meal-time-badge breakfast">
+              <i class="fas fa-sun"></i>
+              <span>Breakfast</span>
+            </div>
+            <div class="meal-content">
+              <p>{{ meal_plan.breakfast }}</p>
+            </div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-time-badge mid-morning">
+              <i class="fas fa-apple-alt"></i>
+              <span>Mid-Morning</span>
+            </div>
+            <div class="meal-content">
+              <p>{{ meal_plan.mid_morning }}</p>
+            </div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-time-badge lunch">
+              <i class="fas fa-drumstick-bite"></i>
+              <span>Lunch</span>
+            </div>
+            <div class="meal-content">
+              <p>{{ meal_plan.lunch }}</p>
+            </div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-time-badge evening">
+              <i class="fas fa-cookie-bite"></i>
+              <span>Evening Snack</span>
+            </div>
+            <div class="meal-content">
+              <p>{{ meal_plan.evening }}</p>
+            </div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-time-badge dinner">
+              <i class="fas fa-moon"></i>
+              <span>Dinner</span>
+            </div>
+            <div class="meal-content">
+              <p>{{ meal_plan.dinner }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="tips-section">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> Expert Tips</h2>
+        <div class="tips-grid">
+          {% for tip in meal_plan.tips %}
+          <div class="tip-card">
+            <div class="tip-icon"><i class="fas fa-check"></i></div>
+            <p>{{ tip }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- User Stats -->
+      <div class="user-stats-section">
+        <h2 class="section-title"><i class="fas fa-user-chart"></i> Your Profile Summary</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <i class="fas fa-birthday-cake"></i>
+            <div>
+              <span class="stat-val">{{ age }}</span>
+              <span class="stat-lbl">Years Old</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-venus-mars"></i>
+            <div>
+              <span class="stat-val">{{ gender }}</span>
+              <span class="stat-lbl">Gender</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-running"></i>
+            <div>
+              <span class="stat-val">{{ activity }}</span>
+              <span class="stat-lbl">Activity Level</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-fire-alt"></i>
+            <div>
+              <span class="stat-val">{{ meal_plan.calories.split('–')[0] if '–' in meal_plan.calories else meal_plan.calories }}</span>
+              <span class="stat-lbl">Min kcal/day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="result-actions">
+        <a href="/form" class="btn btn-primary">
+          <i class="fas fa-redo"></i>
+          Try Again
+        </a>
+        <a href="/" class="btn btn-outline">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+        <button onclick="window.print()" class="btn btn-secondary">
+          <i class="fas fa-print"></i>
+          Print / Save
+        </button>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer">
+        <i class="fas fa-info-circle"></i>
+        This plan is generated by an AI model for general guidance only. Please consult a registered dietitian or healthcare professional before making significant dietary changes.
+      </div>
+
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

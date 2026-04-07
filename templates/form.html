@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Your Diet Plan — DietAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="form-page">
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <i class="fas fa-leaf"></i>
+        <span>DietAI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/form" class="active">Get Started</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Form Section -->
+  <section class="form-section">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <h1>Tell Us About Yourself</h1>
+        <p>Fill in your details below and our AI will generate your personalised diet plan.</p>
+      </div>
+
+      <!-- Error message (shown if validation fails) -->
+      {% if error %}
+      <div class="alert alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form action="/predict" method="POST" class="diet-form" id="dietForm">
+
+        <!-- Personal Details -->
+        <div class="form-section-title">
+          <i class="fas fa-user"></i>
+          Personal Details
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">
+              <i class="fas fa-id-card"></i> Your Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              maxlength="50"
+            />
+          </div>
+          <div class="form-group">
+            <label for="gender">
+              <i class="fas fa-venus-mars"></i> Gender
+            </label>
+            <select id="gender" name="gender" required>
+              <option value="" disabled selected>Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other / Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="age">
+            <i class="fas fa-birthday-cake"></i> Age <span class="unit">(years)</span>
+          </label>
+          <div class="input-with-hint">
+            <input
+              type="number"
+              id="age"
+              name="age"
+              placeholder="e.g. 25"
+              min="1"
+              max="120"
+              step="1"
+              required
+            />
+            <span class="input-hint">1–120 years</span>
+          </div>
+        </div>
+
+        <!-- Body Metrics -->
+        <div class="form-section-title">
+          <i class="fas fa-ruler-combined"></i>
+          Body Metrics
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="weight">
+              <i class="fas fa-weight-hanging"></i> Weight <span class="unit">(kg)</span>
+            </label>
+            <div class="input-with-hint">
+              <input
+                type="number"
+                id="weight"
+                name="weight"
+                placeholder="e.g. 70"
+                min="20"
+                max="300"
+                step="0.1"
+                required
+              />
+              <span class="input-hint">20–300 kg</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="height">
+              <i class="fas fa-ruler-vertical"></i> Height <span class="unit">(cm)</span>
+            </label>
+            <div class="input-with-hint">
+              <input
+                type="number"
+                id="height"
+                name="height"
+                placeholder="e.g. 170"
+                min="100"
+                max="250"
+                step="0.1"
+                required
+              />
+              <span class="input-hint">100–250 cm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live BMI Preview -->
+        <div class="bmi-preview" id="bmiPreview" style="display:none;">
+          <div class="bmi-preview-label">Live BMI Preview</div>
+          <div class="bmi-preview-value" id="bmiValue">--</div>
+          <div class="bmi-preview-category" id="bmiCategory">Enter weight & height</div>
+          <div class="bmi-bar-container">
+            <div class="bmi-bar" id="bmiBar"></div>
+            <div class="bmi-markers">
+              <span>18.5</span>
+              <span>25</span>
+              <span>30</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Level -->
+        <div class="form-section-title">
+          <i class="fas fa-running"></i>
+          Activity Level
+        </div>
+
+        <div class="activity-grid">
+          <label class="activity-option">
+            <input type="radio" name="activity" value="Sedentary" />
+            <div class="activity-card">
+              <div class="activity-icon">🛋️</div>
+              <div class="activity-name">Sedentary</div>
+              <div class="activity-desc">Little or no exercise</div>
+            </div>
+          </label>
+          <label class="activity-option">
+            <input type="radio" name="activity" value="Light" />
+            <div class="activity-card">
+              <div class="activity-icon">🚶</div>
+              <div class="activity-name">Light</div>
+              <div class="activity-desc">1–3 days/week</div>
+            </div>
+          </label>
+          <label class="activity-option">
+            <input type="radio" name="activity" value="Moderate" checked />
+            <div class="activity-card">
+              <div class="activity-icon">🏃</div>
+              <div class="activity-name">Moderate</div>
+              <div class="activity-desc">3–5 days/week</div>
+            </div>
+          </label>
+          <label class="activity-option">
+            <input type="radio" name="activity" value="Active" />
+            <div class="activity-card">
+              <div class="activity-icon">🏋️</div>
+              <div class="activity-name">Active</div>
+              <div class="activity-desc">6–7 days/week</div>
+            </div>
+          </label>
+          <label class="activity-option">
+            <input type="radio" name="activity" value="Very Active" />
+            <div class="activity-card">
+              <div class="activity-icon">⚡</div>
+              <div class="activity-name">Very Active</div>
+              <div class="activity-desc">Intense daily</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+          <i class="fas fa-magic"></i>
+          Generate My Diet Plan
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
